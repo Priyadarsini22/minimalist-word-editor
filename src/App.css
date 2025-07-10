@@ -1,0 +1,47 @@
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .toolbar {
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #333;
+}
+
+.dark-mode .toolbar select,
+.dark-mode .toolbar button,
+.dark-mode .toolbar input[type="range"] {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.dark-mode .editor-box {
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+.dark-mode .auth-box {
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+.dark-mode .auth-box input {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.dark-mode .auth-box button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.dark-mode .timer-box {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  color: #fff;
+}
