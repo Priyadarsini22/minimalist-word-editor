@@ -8,11 +8,10 @@ import jsPDF from "jspdf";
 import "../App.css";
 
 const Dashboard = () => {
- const { accessToken, loading: authLoading } = useContext(AuthContext);
+  const { accessToken, loading: authLoading } = useContext(AuthContext);
 
   const [docs, setDocs] = useState([]);
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
+  const [newDoc, setNewDoc] = useState({ title: "", content: "", is_public: false });
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
   const [loadingDocs, setLoadingDocs] = useState(true);
@@ -31,16 +30,15 @@ const Dashboard = () => {
 
   // 💾 Save new doc
   const handleSave = () => {
-    if (!content.trim()) return;
+    if (!newDoc.content.trim()) return;
     axiosInstance.post(
       "api/documents/",
-      { title: title || "Untitled", content },
+      { title: newDoc.title || "Untitled", content: newDoc.content, is_public: newDoc.is_public },
       { headers: { Authorization: `Bearer ${accessToken}` } }
     )
       .then((res) => {
         setDocs((prev) => [...prev, res.data]);
-        setContent("");
-        setTitle("");
+        setNewDoc({ title: "", content: "", is_public: false });
       })
       .catch((err) => console.error("❌ Save doc error:", err));
   };
@@ -49,7 +47,7 @@ const Dashboard = () => {
   const handleUpdate = (doc) => {
     axiosInstance.put(
       `api/documents/${doc.id}/`,
-      { title: doc.title, content: doc.content },
+      { title: doc.title, content: doc.content, is_public: doc.is_public },
       { headers: { Authorization: `Bearer ${accessToken}` } }
     )
       .then((res) => console.log("✅ Updated:", res.data))
@@ -99,7 +97,6 @@ const Dashboard = () => {
         : new Date(a.updated_at) - new Date(b.updated_at)
     );
 
-  // Show loading or login state
   if (authLoading) {
     return <div className="p-4">Loading authentication...</div>;
   }
@@ -117,10 +114,10 @@ const Dashboard = () => {
           type="text"
           placeholder="Enter document title..."
           className="w-full border p-2 rounded mb-2"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={newDoc.title}
+          onChange={(e) => setNewDoc(prev => ({ ...prev, title: e.target.value }))}
         />
-        <Editor content={content} setContent={setContent} />
+        <Editor doc={newDoc} setDoc={setNewDoc} handleUpdate={handleUpdate} />
         <button onClick={handleSave} className="save-btn mt-2">
           Save Document
         </button>
